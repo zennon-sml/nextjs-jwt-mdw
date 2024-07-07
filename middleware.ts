@@ -1,27 +1,50 @@
-import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import * as jose from 'jose'
-// This function can be marked `async` if using `await` inside
+
 export async function middleware(request: NextRequest) {
-  // check the cookies
-  const cookie = cookies().get('Authorization')
+  // Check the cookies
+  const cookie = request.cookies.get('Authorization')
+  const currentPath = request.nextUrl.pathname
+
+  // If no cookie and the user is not on the login or signup page, redirect to login
   if (!cookie) {
-    return NextResponse.redirect(new URL('/login', request.url))
+    if (
+      !currentPath.startsWith('/login') &&
+      !currentPath.startsWith('/signup')
+    ) {
+      return NextResponse.redirect(new URL('/login', request.url))
+    }
+    return NextResponse.next()
   }
-  // valide the jwt cookie
+
+  // Validate the JWT cookie
   const secret = new TextEncoder().encode(process.env.JWT_SECRET_KEY)
   const jwt = cookie.value
 
   try {
     const { payload } = await jose.jwtVerify(jwt, secret, {})
     console.log(payload)
+
+    // If the user is already logged in and tries to access login or signup page, redirect to home
+    if (currentPath.startsWith('/login') || currentPath.startsWith('/signup')) {
+      return NextResponse.redirect(new URL('/', request.url))
+    }
+
+    return NextResponse.next()
   } catch (err) {
-    return NextResponse.redirect(new URL('/login', request.url))
+    // If JWT validation fails, redirect to login
+    if (
+      !currentPath.startsWith('/login') &&
+      !currentPath.startsWith('/signup')
+    ) {
+      return NextResponse.redirect(new URL('/login', request.url))
+    }
+    return NextResponse.next()
   }
 }
 
 // See "Matching Paths" below to learn more
 export const config = {
-  matcher: '/protected/:path*',
+  matcher: ['/protected/:path*', '/login', '/signup'],
 }

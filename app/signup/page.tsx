@@ -6,7 +6,7 @@ import { useFormState } from 'react-dom'
 export default function SignUp() {
   const [error, formAction] = useFormState(SignUpAction, '')
   return (
-    <div className="flex flex-col gap-4 w-full h-screen">
+    <div className="flex flex-col gap-4 w-full h-screen items-center justify-center">
       <h1>SignUp</h1>
       <form action={formAction} className="flex flex-col gap-2">
         <input

@@ -24,7 +24,7 @@ export default async function LoginAction(
   cookies().set('Authorization', json.token, {
     secure: true,
     httpOnly: true,
-    expires: Date.now() + 600 * 1000,
+    expires: Date.now() + 60 * 1000,
     path: '/',
     sameSite: 'strict',
   })
