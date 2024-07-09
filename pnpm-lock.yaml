@@ -11,9 +11,6 @@ importers:
       '@prisma/client':
         specifier: 5.16.1
         version: 5.16.1(prisma@5.16.1)
-      '@types/js-cookie':
-        specifier: ^3.0.6
-        version: 3.0.6
       bcryptjs:
         specifier: ^2.4.3
         version: 2.4.3
@@ -39,6 +36,9 @@ importers:
       '@types/bcryptjs':
         specifier: ^2.4.6
         version: 2.4.6
+      '@types/js-cookie':
+        specifier: ^3.0.6
+        version: 3.0.6
       '@types/node':
         specifier: ^20.14.9
         version: 20.14.9

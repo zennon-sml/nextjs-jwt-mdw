@@ -1,48 +1,45 @@
 'use client'
-
-import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
-import Cookies from 'js-cookie' // Make sure to install this library
+import Link from 'next/link'
+import Cookies from 'js-cookie' // Client-side cookie management library
+import { useRouter } from 'next/navigation'
 
-export default function NavBar() {
-  const [isLogedIn, setIsLogedIn] = useState(false)
-
-  const checkAuthToken = () => {
-    const authToken = Cookies.get('Authorization')
-    setIsLogedIn(!!authToken)
-  }
+export default function Nav() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const router = useRouter()
 
   useEffect(() => {
-    // Initial check when the component mounts
-    checkAuthToken()
-
-    // Set up an interval to check for token changes
-    const interval = setInterval(() => {
-      checkAuthToken()
-    }, 1000) // Check every second (adjust as needed)
-
-    // Clean up interval on component unmount
-    return () => clearInterval(interval)
+    const authToken = Cookies.get('Authorization')
+    setIsLoggedIn(!!authToken) // Convert authToken to a boolean value
   }, [])
 
-  const handleLogout = () => {
-    // Remove the token and update state
+  function logOut() {
     Cookies.remove('Authorization')
-    setIsLogedIn(false)
+    setIsLoggedIn(false)
+    router.push('/') // Client-side redirection
   }
 
   return (
-    <div className="fixed top-0 bg-slate-400 p-4 w-full">
-      <Link href="/" className="bg-slate-500 rounded-md p-2">
-        Home
-      </Link>
-      {isLogedIn ? (
-        <button onClick={handleLogout}>Logout</button>
-      ) : (
-        <Link href="/login" className="bg-slate-500 rounded-md p-2">
-          Login
+    <nav className="fixed w-full p-2 top-0 flex justify-between gap-2">
+      <div>
+        <Link href="/" className="bg-slate-500 rounded-md p-2">
+          Home
         </Link>
+      </div>
+      {isLoggedIn ? (
+        <button onClick={logOut} className="bg-slate-500 rounded-md p-2">
+          Logout
+        </button>
+      ) : (
+        <div className="flex gap-2">
+          <Link href="/signup" className="bg-slate-500 rounded-md p-2">
+            Signup
+          </Link>
+          <Link href="/login" className="bg-slate-500 rounded-md p-2">
+            Login
+          </Link>
+        </div>
       )}
-    </div>
+    </nav>
   )
 }
