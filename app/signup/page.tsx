@@ -13,19 +13,19 @@ export default function SignUp() {
           type="email"
           placeholder="email"
           name="email"
-          className="bg-slate-500 rounded-md p-1"
+          className="bg-lime-500 rounded-md p-1 placeholder:text-black"
         />
         <input
           type="password"
           placeholder="password"
           name="password"
-          className="bg-slate-500 rounded-md p-1"
+          className="bg-lime-500 rounded-md p-1 placeholder:text-black"
         />
-        <button type="submit" className="bg-slate-500 rounded-md p-2">
+        <button type="submit" className="bg-lime-500 rounded-md p-2">
           SignUp
         </button>
       </form>
-      {error && <p className="bg-slate-500">{error}</p>}
+      {error && <p className="bg-lime-500">{error}</p>}
     </div>
   )
 }
